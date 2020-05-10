@@ -1,0 +1,53 @@
+buildscript {
+	ext {
+		domaVersion = "2.25.1"
+		domaStarterVersion = "1.2.1"
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.3.0.BUILD-SNAPSHOT'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+	// Spring
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Utils
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// DB
+	runtime "mysql:mysql-connector-java"
+	annotationProcessor "org.seasar.doma:doma:${domaVersion}"
+	implementation "org.seasar.doma:doma:${domaVersion}"
+	implementation "org.seasar.doma.boot:doma-spring-boot-starter:${domaStarterVersion}"
+
+	// Test
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
